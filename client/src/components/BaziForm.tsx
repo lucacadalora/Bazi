@@ -81,7 +81,16 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab, onFormSubmi
   // Mutation for submitting form
   const mutation = useMutation({
     mutationFn: submitBaziReading,
+    onMutate: () => {
+      console.log("Mutation started - form is being submitted");
+      // This is a good place to set loading state
+      if (onFormSubmit) {
+        onFormSubmit();
+      }
+      setActiveTab("analysis");
+    },
     onSuccess: (data) => {
+      console.log("Mutation successful with data:", data);
       onAnalysisComplete(data);
       setActiveTab("analysis");
       toast({
@@ -90,11 +99,13 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab, onFormSubmi
       });
     },
     onError: (error) => {
+      console.error("Mutation error:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to generate BaZi analysis",
         variant: "destructive",
       });
+      setActiveTab("information"); // Return to form on error
     },
   });
 
@@ -123,31 +134,8 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab, onFormSubmi
     console.log("Submitting form data to API:", values);
     
     try {
-      // Call the form submission handler to update global state
-      if (onFormSubmit) {
-        onFormSubmit();
-      }
-      
-      // Directly show loading state by switching to analysis tab
-      setActiveTab("analysis"); 
-      
-      // Submit the mutation to generate the BaZi analysis
-      mutation.mutate(values, {
-        onSuccess: (data) => {
-          console.log("Successfully received BaZi analysis:", data);
-          onAnalysisComplete(data);
-          setActiveTab("analysis");
-        },
-        onError: (error) => {
-          console.error("Error in BaZi analysis submission:", error);
-          toast({
-            title: "Analysis Error",
-            description: "Could not generate your BaZi analysis. Please try again.",
-            variant: "destructive",
-          });
-          setActiveTab("information"); // Return to form on error
-        }
-      });
+      // Submit the mutation - onMutate handler will take care of setting loading state
+      mutation.mutate(values);
     } catch (e) {
       console.error("Exception in form submission:", e);
       toast({
