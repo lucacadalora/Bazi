@@ -14,9 +14,11 @@ const StepperContext = createContext<StepperContextType | undefined>(undefined);
 
 export const useStepperContext = () => {
   const context = useContext(StepperContext);
-  if (!context) {
+  
+  if (context === undefined) {
     throw new Error("useStepperContext must be used within a StepperProvider");
   }
+  
   return context;
 };
 
@@ -32,37 +34,40 @@ export const StepperProvider = ({
   initialStep = 0,
 }: StepperProviderProps) => {
   const [currentStep, setCurrentStep] = useState(initialStep);
-
+  
   const nextStep = () => {
-    if (currentStep < steps.length - 1) {
-      setCurrentStep(currentStep + 1);
-    }
+    setCurrentStep((prev) => {
+      return prev < steps.length - 1 ? prev + 1 : prev;
+    });
   };
-
+  
   const prevStep = () => {
-    if (currentStep > 0) {
-      setCurrentStep(currentStep - 1);
-    }
+    setCurrentStep((prev) => {
+      return prev > 0 ? prev - 1 : prev;
+    });
   };
-
+  
   const goToStep = (step: number) => {
     if (step >= 0 && step < steps.length) {
       setCurrentStep(step);
     }
   };
-
-  const value = {
-    currentStep,
-    steps,
-    nextStep,
-    prevStep,
-    goToStep,
-    isFirstStep: currentStep === 0,
-    isLastStep: currentStep === steps.length - 1,
-  };
-
+  
+  const isFirstStep = currentStep === 0;
+  const isLastStep = currentStep === steps.length - 1;
+  
   return (
-    <StepperContext.Provider value={value}>
+    <StepperContext.Provider
+      value={{
+        currentStep,
+        steps,
+        nextStep,
+        prevStep,
+        goToStep,
+        isFirstStep,
+        isLastStep,
+      }}
+    >
       {children}
     </StepperContext.Provider>
   );

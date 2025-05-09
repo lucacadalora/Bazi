@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
 import { useStepperContext } from "./StepperContext";
+import { Button } from "@/components/ui/button";
 
 interface StepperButtonsProps {
   onComplete?: () => void;
@@ -15,35 +15,48 @@ export function StepperButtons({
   backDisabled = false,
 }: StepperButtonsProps) {
   const { nextStep, prevStep, isFirstStep, isLastStep } = useStepperContext();
-
+  
+  const handleComplete = () => {
+    if (onComplete) {
+      onComplete();
+    }
+  };
+  
   return (
-    <div className="mt-8 flex justify-between">
+    <div className="flex justify-between mt-8">
       <Button
+        type="button"
         variant="outline"
         onClick={prevStep}
         disabled={isFirstStep || backDisabled}
-        type="button"
+        className="px-6"
       >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
         Back
       </Button>
       
       {isLastStep ? (
-        <Button 
-          onClick={onComplete} 
-          disabled={nextDisabled}
-          className="bg-accent hover:bg-accent-dark text-ink"
+        <Button
           type="button"
+          onClick={handleComplete}
+          disabled={nextDisabled}
+          className="px-6 bg-primary hover:bg-primary-dark transition-colors"
         >
           {completeText}
         </Button>
       ) : (
-        <Button 
-          onClick={nextStep} 
-          disabled={nextDisabled}
-          className="bg-accent hover:bg-accent-dark text-ink"
+        <Button
           type="button"
+          onClick={nextStep}
+          disabled={nextDisabled}
+          className="px-6"
         >
           Next
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
         </Button>
       )}
     </div>

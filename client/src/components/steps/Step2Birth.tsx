@@ -1,216 +1,137 @@
-import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
 import { useFormContext } from "react-hook-form";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Button } from "@/components/ui/button";
-import { CalendarIcon, Clock } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
-import { useState, useEffect } from "react";
-import { Slider } from "@/components/ui/slider";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 export function Step2Birth() {
   const form = useFormContext();
-  const [date, setDate] = useState<Date | undefined>(
-    form.getValues("birthDate") ? new Date(form.getValues("birthDate")) : undefined
-  );
   
-  const [isApproxTime, setIsApproxTime] = useState(form.getValues("isExactTime") === false);
-  
-  // Handle approximate time checkbox
-  useEffect(() => {
-    if (isApproxTime) {
-      form.setValue("birthTime", "12:00");
-      form.setValue("isExactTime", false);
-    } else {
-      form.setValue("isExactTime", true);
-    }
-  }, [isApproxTime, form]);
-
-  // Format time from slider values (hours and minutes)
-  const formatTimeFromValues = (hours: number, minutes: number) => {
-    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
-  };
-
-  // Convert time string to slider values
-  const timeToValues = (timeString: string) => {
-    const [hours, minutes] = timeString.split(':').map(Number);
-    return { hours, minutes };
-  };
-
-  // Get current time values from form
-  const currentTimeValues = timeToValues(form.getValues("birthTime") || "00:00");
-  
-  // State for hours and minutes
-  const [hours, setHours] = useState(currentTimeValues.hours);
-  const [minutes, setMinutes] = useState(currentTimeValues.minutes);
-
-  // Update form when hours or minutes change
-  useEffect(() => {
-    const timeString = formatTimeFromValues(hours, minutes);
-    form.setValue("birthTime", timeString);
-  }, [hours, minutes, form]);
-
   return (
     <div className="space-y-6">
-      <div className="text-center mb-6">
-        <h2 className="text-2xl font-bold text-primary-dark">Birth Information</h2>
-        <p className="text-muted-foreground mt-2">
-          The exact date and time of birth are essential for accurate BaZi analysis
-        </p>
+      <div className="flex items-center mb-6">
+        <div className="bg-secondary/10 p-2 rounded-full mr-3">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-secondary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+        </div>
+        <h2 className="font-display text-2xl font-semibold text-ink">Birth Details</h2>
       </div>
-
-      {/* Birth Date Field */}
-      <FormField
-        control={form.control}
-        name="birthDate"
-        render={({ field }) => (
-          <FormItem className="flex flex-col">
-            <FormLabel>Date of Birth</FormLabel>
-            <Popover>
-              <PopoverTrigger asChild>
-                <FormControl>
-                  <Button
-                    variant="outline"
-                    className={cn(
-                      "pl-3 text-left font-normal bg-white/90",
-                      !field.value && "text-muted-foreground"
-                    )}
-                  >
-                    {field.value ? (
-                      format(new Date(field.value), "PPP")
-                    ) : (
-                      <span>Pick a date</span>
-                    )}
-                    <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                  </Button>
-                </FormControl>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(newDate) => {
-                    setDate(newDate);
-                    if (newDate) {
-                      field.onChange(format(newDate, "yyyy-MM-dd"));
-                    }
-                  }}
-                  disabled={(date) => date > new Date()}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-            <FormDescription>
-              Select your exact birth date
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      {/* Birth Time Fields */}
-      <div className="space-y-4">
+      
+      <div className="space-y-6">
         <FormField
           control={form.control}
-          name="birthTime"
+          name="birthDate"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Time of Birth</FormLabel>
-              <div className="flex flex-col space-y-2">
-                <div className="flex items-center">
-                  <Clock className="mr-2 h-4 w-4 text-muted-foreground" />
-                  <span className="font-medium text-xl">
-                    {formatTimeFromValues(hours, minutes)}
-                  </span>
-                </div>
-                
-                {!isApproxTime && (
-                  <div className="space-y-4 mt-2">
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span>Hours</span>
-                        <span>{hours}</span>
-                      </div>
-                      <Slider
-                        value={[hours]}
-                        min={0}
-                        max={23}
-                        step={1}
-                        onValueChange={(value) => setHours(value[0])}
-                        disabled={isApproxTime}
-                      />
-                    </div>
-                    
-                    <div className="space-y-1">
-                      <div className="flex justify-between text-sm">
-                        <span>Minutes</span>
-                        <span>{minutes}</span>
-                      </div>
-                      <Slider
-                        value={[minutes]}
-                        min={0}
-                        max={59}
-                        step={1}
-                        onValueChange={(value) => setMinutes(value[0])}
-                        disabled={isApproxTime}
-                      />
-                    </div>
-                  </div>
-                )}
-                
-                <div className="flex items-center space-x-2 mt-2">
-                  <Checkbox
-                    id="approx-time"
-                    checked={isApproxTime}
-                    onCheckedChange={(checked) => {
-                      setIsApproxTime(checked === true);
-                    }}
-                  />
-                  <label
-                    htmlFor="approx-time"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    I don't know my exact birth time (will use 12:00)
-                  </label>
-                </div>
-                
+              <FormLabel>Date of Birth</FormLabel>
+              <FormControl>
+                <Input
+                  type="date"
+                  {...field}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+          <FormField
+            control={form.control}
+            name="birthTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Time of Birth</FormLabel>
                 <FormControl>
                   <Input
-                    type="hidden"
+                    type="time"
                     {...field}
                   />
                 </FormControl>
-              </div>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          
+          <FormField
+            control={form.control}
+            name="isExactTime"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Time Accuracy</FormLabel>
+                <FormControl>
+                  <RadioGroup
+                    onValueChange={(value) => field.onChange(value === "true")}
+                    defaultValue={field.value ? "true" : "false"}
+                    className="flex items-center space-x-4"
+                  >
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="true" id="exactTime" />
+                      <FormLabel htmlFor="exactTime" className="font-normal">Exact</FormLabel>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem value="false" id="approxTime" />
+                      <FormLabel htmlFor="approxTime" className="font-normal">Approximate</FormLabel>
+                    </div>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        
+        <FormField
+          control={form.control}
+          name="birthCity"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Birth City</FormLabel>
+              <FormControl>
+                <div className="relative">
+                  <Input
+                    placeholder="Enter your birth city"
+                    {...field}
+                    className="pr-10"
+                  />
+                  <span className="absolute right-3 top-2.5 text-gray-400">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                    </svg>
+                  </span>
+                </div>
+              </FormControl>
+              <p className="text-xs text-gray-500 mt-1">This helps determine your exact cosmic position at birth</p>
               <FormMessage />
             </FormItem>
           )}
         />
       </div>
-
-      {/* Birth City Field */}
-      <FormField
-        control={form.control}
-        name="birthCity"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Birth City</FormLabel>
-            <FormControl>
-              <Input 
-                placeholder="Enter your birth city" 
-                className="bg-white/90" 
-                {...field} 
-              />
-            </FormControl>
-            <FormDescription>
-              City and country where you were born
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
+      
+      <div className="mt-4 bg-gray-50 border border-gray-100 rounded-lg p-4">
+        <div className="flex items-start">
+          <div className="text-amber-500 mt-1 mr-3">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h4 className="text-sm font-medium text-gray-900">Why birth time matters in BaZi</h4>
+            <p className="text-xs text-gray-600 mt-1">
+              Your birth time determines your Hour Pillar, which influences your personality traits, 
+              relationships, and potential life challenges. The more accurate the time, the more 
+              precise your reading will be.
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

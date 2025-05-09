@@ -11,9 +11,9 @@ interface StepperProps {
 export function Stepper({ steps, children, initialStep = 0 }: StepperProps) {
   return (
     <StepperProvider steps={steps} initialStep={initialStep}>
-      <div className="w-full">
+      <div className="space-y-6">
         <StepperNav />
-        <div className="mt-8">{children}</div>
+        {children}
       </div>
     </StepperProvider>
   );
@@ -25,7 +25,5 @@ interface StepProps {
 }
 
 export function Step({ step, children }: StepProps) {
-  return (
-    <div className="space-y-6">{children}</div>
-  );
+  return <div data-step={step}>{children}</div>;
 }

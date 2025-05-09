@@ -44,6 +44,13 @@ export default function Header() {
   function handleLogout() {
     window.location.href = "/api/logout";
   }
+  
+  // Get profile initials safely
+  const getInitials = () => {
+    if (user?.firstName) return user.firstName.charAt(0);
+    if (user?.email) return user.email.charAt(0);
+    return "U";
+  };
 
   return (
     <header className="bg-gradient-to-r from-water-dark to-primary-dark text-white shadow-md">
@@ -85,8 +92,8 @@ export default function Header() {
                   <div className="flex flex-col space-y-2 mt-4">
                     <div className="flex items-center space-x-2 py-2">
                       <Avatar>
-                        <AvatarImage src={user?.profileImageUrl} />
-                        <AvatarFallback>{user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}</AvatarFallback>
+                        <AvatarImage src={user?.profileImageUrl || undefined} />
+                        <AvatarFallback>{getInitials()}</AvatarFallback>
                       </Avatar>
                       <span className="font-medium">{user?.firstName || user?.email || "User"}</span>
                     </div>
@@ -142,8 +149,8 @@ export default function Header() {
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="relative h-10 w-10 rounded-full">
                       <Avatar>
-                        <AvatarImage src={user?.profileImageUrl} />
-                        <AvatarFallback>{user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}</AvatarFallback>
+                        <AvatarImage src={user?.profileImageUrl || undefined} />
+                        <AvatarFallback>{getInitials()}</AvatarFallback>
                       </Avatar>
                     </Button>
                   </DropdownMenuTrigger>
