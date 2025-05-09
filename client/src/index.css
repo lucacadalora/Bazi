@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 60 33% 96%;
+  --foreground: 20 14.3% 17.1%;
+  --muted: 60 4.8% 95.9%;
+  --muted-foreground: 25 5.3% 44.7%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 20 14.3% 4.1%;
+  --card: 0 0% 100%;
+  --card-foreground: 20 14.3% 4.1%;
+  --border: 20 5.9% 90%;
+  --input: 20 5.9% 90%;
+  --primary: 0 68% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 33% 46%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 44 77% 53%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 60 9.1% 97.8%;
+  --ring: 20 14.3% 4.1%;
+  --radius: 0.5rem;
+  
+  /* Chart Colors */
+  --chart-1: 135, 68%, 48%;
+  --chart-2: 0, 68%, 42%;
+  --chart-3: 44, 77%, 53%;
+  --chart-4: 0, 0%, 75%;
+  --chart-5: 218, 74%, 33%;
+  
+  /* Custom Colors */
+  --primary-light: 0 75% 67%;
+  --primary-dark: 0 100% 27%;
+  --secondary-light: 135 68% 48%;
+  --secondary-dark: 141 76% 36%;
+  --accent-light: 45 100% 56%;
+  --accent-dark: 43 77% 38%;
+  --water: 218 74% 33%;
+  --water-light: 219 85% 58%;
+  --water-dark: 217 66% 23%;
+  --metal: 0 0% 75%;
+  --metal-light: 0 0% 88%;
+  --metal-dark: 0 0% 62%;
+  --paper: 48 40% 96%;
+  --ink: 0 0% 18%;
+}
+.dark {
+  --background: 20 14.3% 4.1%;
+  --foreground: 60 9.1% 97.8%;
+  --muted: 12 6.5% 15.1%;
+  --muted-foreground: 24 5.4% 63.9%;
+  --popover: 20 14.3% 4.1%;
+  --popover-foreground: 60 9.1% 97.8%;
+  --card: 20 14.3% 4.1%;
+  --card-foreground: 60 9.1% 97.8%;
+  --border: 12 6.5% 15.1%;
+  --input: 12 6.5% 15.1%;
+  --primary: 0 68% 42%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 142 33% 46%;
+  --secondary-foreground: 0 0% 100%;
+  --accent: 44 77% 53%;
+  --accent-foreground: 0 0% 0%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 24 5.7% 82.9%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-body antialiased bg-background text-foreground;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display;
+  }
+  
+  .chinese-text {
+    @apply font-chinese;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.fade-in {
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.spin-slow {
+  animation: spin 6s linear infinite;
+}
+
+/* Custom utilities */
+.element-icon {
+  @apply w-12 h-12 flex items-center justify-center rounded-full text-white;
+}
+
+.progress-bar {
+  @apply w-full h-1.5 bg-gray-200 rounded-full overflow-hidden;
+}
+
+.progress-bar .progress {
+  @apply h-full rounded-full transition-all duration-500 ease-out;
+}
+
+/* Background gradients */
+.bg-bazi-gradient {
+  @apply bg-gradient-to-r from-water-dark to-primary-dark;
+}
+
+.bg-hero-gradient {
+  @apply bg-gradient-to-b from-water-light/20 to-paper;
+}
+
+.bg-chart-gradient {
+  @apply bg-gradient-to-br from-water-dark to-primary-dark;
+}
+
+.bg-element-gradient {
+  @apply bg-gradient-to-r from-water to-primary;
+}
