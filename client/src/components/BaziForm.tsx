@@ -99,7 +99,27 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
 
   // Form submission handler
   function onSubmit(values: BaziFormValues) {
+    console.log("Handling form submission with values:", values);
+    
+    // Prevent double submission
+    if (mutation.isPending) {
+      console.log("Submission already in progress, preventing duplicate submission");
+      return;
+    }
+    
+    // Enhanced form data validation
+    if (!values.fullName || !values.birthDate || !values.birthTime || !values.birthCity) {
+      console.error("Required form fields are missing");
+      toast({
+        title: "Missing Information",
+        description: "Please fill in all required fields before submitting.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     // Submit the form data
+    console.log("Submitting form data to API:", values);
     mutation.mutate(values);
   }
 
@@ -109,7 +129,10 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
   return (
     <Form {...form}>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-4xl mx-auto">
+        <form onSubmit={form.handleSubmit((values) => {
+          console.log("Form submitted with values:", values);
+          onSubmit(values);
+        })} className="space-y-8 max-w-4xl mx-auto">
           <Stepper steps={steps}>
             <div className="bg-white/80 shadow-md rounded-lg p-6">
               <StepContent step={0} />
@@ -138,16 +161,16 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                 )}
               />
               
-              {/* Handle submission and disable validation for non-last steps */}
+              {/* Using a direct function for the final submit */}
               <StepperButtons 
-                onComplete={() => {
-                  console.log("Form values before submission:", form.getValues());
-                  
-                  // Submit the form
-                  form.handleSubmit((values) => {
-                    console.log("Form submitted with values:", values);
+                onComplete={() => { 
+                  if (form.formState.isValid) {
+                    const values = form.getValues();
+                    console.log("Directly submitting form with values:", values);
                     onSubmit(values);
-                  })();
+                  } else {
+                    form.trigger();
+                  }
                 }}
                 completeText={
                   mutation.isPending ? 

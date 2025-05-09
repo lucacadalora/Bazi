@@ -20,9 +20,8 @@ export function StepperButtons({
   const handleComplete = () => {
     if (onComplete) {
       onComplete();
-    } else {
-      console.error("No onComplete handler provided to StepperButtons");
     }
+    // When null is passed and type is submit, the browser will handle form submission
   };
   
   return (
@@ -42,7 +41,7 @@ export function StepperButtons({
       
       {isLastStep ? (
         <Button
-          type="button"
+          type="button" 
           onClick={handleComplete}
           disabled={nextDisabled}
           className="px-6 bg-primary hover:bg-primary-dark transition-colors"
