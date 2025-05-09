@@ -58,8 +58,6 @@ function StepContent({ step }: { step: number }) {
 
 export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormProps) {
   const { toast } = useToast();
-  const [interestsList, setInterestsList] = useState<string[]>([]);
-  
   // Initialize form with default values
   const form = useForm<BaziFormValues>({
     resolver: zodResolver(formSchema),
@@ -140,10 +138,34 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                 )}
               />
               
+              {/* Handle submission and disable validation for non-last steps */}
               <StepperButtons 
-                onComplete={() => form.handleSubmit(onSubmit)()}
-                completeText={mutation.isPending ? "Processing..." : "Generate BaZi Analysis"}
-                nextDisabled={false}
+                onComplete={() => {
+                  console.log("Form values before submission:", form.getValues());
+                  
+                  // Submit the form
+                  form.handleSubmit((values) => {
+                    console.log("Form submitted with values:", values);
+                    onSubmit(values);
+                  })();
+                }}
+                completeText={
+                  mutation.isPending ? 
+                  <div className="flex items-center">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Processing...
+                  </div> : 
+                  <>
+                    Generate BaZi Analysis
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    </svg>
+                  </>
+                }
+                nextDisabled={mutation.isPending}
               />
             </div>
           </Stepper>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   FormControl,
@@ -79,7 +79,17 @@ export function Step3Extras() {
   const handleInterestsChange = (selected: string[]) => {
     setInterestsList(selected);
     form.setValue("interests", selected, { shouldValidate: true });
+    
+    // Log for debugging
+    console.log("Interests updated:", selected);
   };
+  
+  // Set interests in the parent form on component mount and update
+  React.useEffect(() => {
+    if (interestsList.length > 0) {
+      form.setValue("interests", interestsList);
+    }
+  }, [form, interestsList]);
   
   return (
     <div className="space-y-6">

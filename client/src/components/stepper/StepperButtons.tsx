@@ -1,9 +1,10 @@
+import { ReactNode } from "react";
 import { useStepperContext } from "./StepperContext";
 import { Button } from "@/components/ui/button";
 
 interface StepperButtonsProps {
   onComplete?: () => void;
-  completeText?: string;
+  completeText?: ReactNode;
   nextDisabled?: boolean;
   backDisabled?: boolean;
 }
@@ -19,6 +20,8 @@ export function StepperButtons({
   const handleComplete = () => {
     if (onComplete) {
       onComplete();
+    } else {
+      console.error("No onComplete handler provided to StepperButtons");
     }
   };
   
