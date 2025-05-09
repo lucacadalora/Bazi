@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useMediaQuery } from "@/hooks/use-mobile";
+import { useAuth } from "@/hooks/useAuth";
 import {
   Sheet,
   SheetContent,
@@ -9,10 +10,24 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Header() {
   const isMobile = useMediaQuery("(max-width: 768px)");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { user, isAuthenticated, isLoading } = useAuth();
 
   const navItems = [
     { label: "Home", href: "/" },
@@ -21,6 +36,14 @@ export default function Header() {
     { label: "FAQ", href: "/faq" },
     { label: "Contact", href: "/contact" },
   ];
+  
+  function handleLogin() {
+    window.location.href = "/api/login";
+  }
+  
+  function handleLogout() {
+    window.location.href = "/api/logout";
+  }
 
   return (
     <header className="bg-gradient-to-r from-water-dark to-primary-dark text-white shadow-md">
@@ -58,15 +81,44 @@ export default function Header() {
                     {item.label}
                   </Link>
                 ))}
-                <Button 
-                  className="bg-accent hover:bg-accent-dark text-ink font-medium mt-4"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    // Handle sign in logic
-                  }}
-                >
-                  Sign In
-                </Button>
+                {isAuthenticated ? (
+                  <div className="flex flex-col space-y-2 mt-4">
+                    <div className="flex items-center space-x-2 py-2">
+                      <Avatar>
+                        <AvatarImage src={user?.profileImageUrl} />
+                        <AvatarFallback>{user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}</AvatarFallback>
+                      </Avatar>
+                      <span className="font-medium">{user?.firstName || user?.email || "User"}</span>
+                    </div>
+                    <Link 
+                      href="/dashboard" 
+                      className="text-white hover:text-accent-light transition py-2"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      My Readings
+                    </Link>
+                    <Button 
+                      variant="outline"
+                      className="border-white text-white hover:bg-white/10 mt-2"
+                      onClick={() => {
+                        setIsMenuOpen(false);
+                        handleLogout();
+                      }}
+                    >
+                      Log Out
+                    </Button>
+                  </div>
+                ) : (
+                  <Button 
+                    className="bg-accent hover:bg-accent-dark text-ink font-medium mt-4"
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      handleLogin();
+                    }}
+                  >
+                    Log In
+                  </Button>
+                )}
               </nav>
             </SheetContent>
           </Sheet>
@@ -85,9 +137,38 @@ export default function Header() {
             </nav>
             
             <div className="hidden md:block">
-              <Button className="bg-accent hover:bg-accent-dark text-ink font-medium">
-                Sign In
-              </Button>
+              {isAuthenticated ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-10 w-10 rounded-full">
+                      <Avatar>
+                        <AvatarImage src={user?.profileImageUrl} />
+                        <AvatarFallback>{user?.firstName?.charAt(0) || user?.email?.charAt(0) || "U"}</AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-56" align="end">
+                    <DropdownMenuLabel>
+                      <div className="flex flex-col space-y-1">
+                        <p className="text-sm font-medium">{user?.firstName || "User"}</p>
+                        <p className="text-xs text-muted-foreground">{user?.email}</p>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem asChild>
+                      <Link href="/dashboard">My Readings</Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      Log Out
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button className="bg-accent hover:bg-accent-dark text-ink font-medium" onClick={handleLogin}>
+                  Log In
+                </Button>
+              )}
             </div>
           </>
         )}
