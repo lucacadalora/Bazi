@@ -37,6 +37,7 @@ type BaziFormValues = z.infer<typeof formSchema>;
 interface BaziFormProps {
   onAnalysisComplete: (data: any) => void;
   setActiveTab: (tab: string) => void;
+  onFormSubmit?: () => void;
 }
 
 // StepContent component to conditionally render step content
@@ -56,7 +57,7 @@ function StepContent({ step }: { step: number }) {
   );
 }
 
-export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormProps) {
+export default function BaziForm({ onAnalysisComplete, setActiveTab, onFormSubmit }: BaziFormProps) {
   const { toast } = useToast();
   // Initialize form with default values
   const form = useForm<BaziFormValues>({
@@ -118,9 +119,43 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
       return;
     }
     
-    // Submit the form data
+    // Submit the form data with debugging
     console.log("Submitting form data to API:", values);
-    mutation.mutate(values);
+    
+    try {
+      // Call the form submission handler to update global state
+      if (onFormSubmit) {
+        onFormSubmit();
+      }
+      
+      // Directly show loading state by switching to analysis tab
+      setActiveTab("analysis"); 
+      
+      // Submit the mutation to generate the BaZi analysis
+      mutation.mutate(values, {
+        onSuccess: (data) => {
+          console.log("Successfully received BaZi analysis:", data);
+          onAnalysisComplete(data);
+          setActiveTab("analysis");
+        },
+        onError: (error) => {
+          console.error("Error in BaZi analysis submission:", error);
+          toast({
+            title: "Analysis Error",
+            description: "Could not generate your BaZi analysis. Please try again.",
+            variant: "destructive",
+          });
+          setActiveTab("information"); // Return to form on error
+        }
+      });
+    } catch (e) {
+      console.error("Exception in form submission:", e);
+      toast({
+        title: "Submission Error",
+        description: "An unexpected error occurred. Please try again.",
+        variant: "destructive",
+      });
+    }
   }
 
   // Define steps for the stepper

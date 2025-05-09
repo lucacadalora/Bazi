@@ -18,13 +18,17 @@ export default function Home() {
 
   // Handle the analysis completion
   const handleAnalysisComplete = (data: BaziAnalysis) => {
+    console.log("Analysis complete, received data:", data);
     setAnalysisData(data);
     setIsLoading(false);
   };
 
-  // Handle form submission
+  // Handle form submission - this gets called when the form begins processing
   const handleFormSubmit = () => {
+    console.log("Form submission started, setting loading state");
     setIsLoading(true);
+    // Automatically switch to the analysis tab to show loading state
+    setActiveTab("analysis");
   };
 
   // Define tab configuration
@@ -84,7 +88,8 @@ export default function Home() {
             <div className={activeTab === "information" ? "block" : "hidden"} id="information" role="tabpanel" aria-labelledby="information-tab">
               <BaziForm 
                 onAnalysisComplete={handleAnalysisComplete} 
-                setActiveTab={setActiveTab} 
+                setActiveTab={setActiveTab}
+                onFormSubmit={handleFormSubmit}
               />
             </div>
 
