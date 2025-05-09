@@ -1,0 +1,111 @@
+1 System-at-a-Glance
+Layer	Tech picks	Why it fits a BaZi-plus-GPT SaaS
+Client (SPA / PWA)	Next.js 14 / React, Tailwind CSS, Shadcn UI, TanStack Query, Framer-Motion	Fast hydration, file-system routing, easy SSR + API proxy, modern component library, data-fetch caching, smooth micro-animation for “element flow” visuals
+BaZi micro-service	Node 20, TypeScript, bazi-calculator-by-alvamind for core math 
+GitHub
+, date-chinese or js-calendar-converter for solar ↔ lunar conversion 
+npm
+npm
+Off-load deterministic pillar computation; keeps GPT prompt lean
+AI service layer	Lightweight Express / Hono function that calls OpenAI GPT-4o API 
+OpenAI Platform
+Wraps chart JSON into structured “system + user” messages; handles streaming
+Database (optional)	PlanetScale MySQL (serverless) + Prisma	Instant branching for feature flags; EU/US & Asia replicas for latency
+Auth & billing	Clerk (OAuth + passwordless)	Stripe
+Infra / CI	Vercel (edge functions) + GitHub Actions	Zero-config preview URLs; deploy baZi micro-service as edge-runtime function
+Observability	Sentry (FE/BE), Vercel Analytics	Track slow lunar-to-BaZi conversions & GPT latency
+
+2 High-level flow (Mermaid)
+mermaid
+Copy
+Edit
+sequenceDiagram
+  participant User
+  participant WebApp (Next.js)
+  participant BaZiSvc (Edge Fn)
+  participant GPTSvc (Edge Fn)
+  participant OpenAI
+  User->>WebApp: Enter form data
+  WebApp->>BaZiSvc: POST /compute-pillars
+  BaZiSvc->>BaZiSvc: Solar→Lunar→Stems/Branches
+  BaZiSvc-->>WebApp: JSON chart
+  WebApp->>GPTSvc: POST /interpret {chart, preferences}
+  GPTSvc->>OpenAI: chat.completions
+  OpenAI-->>GPTSvc: streamed tokens
+  GPTSvc-->>WebApp: SSE chunks
+  WebApp-->>User: Render pillars + narrative
+3 Detailed component breakdown
+3.1 Client-side UX
+View / Component	UX detail
+Hero landing	Minimal Xing-Kong palette (deep slate + gold accents); Lottie constellation anim; CTA “Generate My Pillars”
+Stepper wizard	Step1Personal.tsx (name, e-mail ⓘ tooltip “alias allowed”) → Step2Birth.tsx (date-picker with auto-tz from browser; granular time slider; “approx?” checkbox autofills 12:00) → Step3Extras.tsx collapsible section for blood type, religion, status, domicile
+Real-time preview panel	As user adjusts DOB/time, a ghost pillar stack fades-in (computed locally via BaZiSvc) showing Heavenly Stem icon & element colour (metal=gray, water=indigo, etc.)
+Result dashboard	Split grid:
+• Four Pillars card with vertical stems/branches, hover → tooltip of Chinese chars & pinyin.
+• Element balance radar (Recharts).
+• 10-Year Luck timeline horizontal scroll; markers animate when scrolled.
+• GPT-Insight panel (streamed text) with copy / save PDF buttons.
+Accessibility / i18n	English ⇄ Bahasa toggle via next-intl; WCAG AA colours; prefers-reduced-motion fallback.
+PWA touches	app.webmanifest, offline shell for cached calculators; Add-to-Home prompt on mobile.
+
+3.2 BaZi micro-service (edge)
+ts
+Copy
+Edit
+// /api/compute-pillars (Edge Runtime)
+import { getPillars } from 'bazi-calculator-by-alvamind'; // accurate lib
+export const POST = async (req: Request) => {
+  const { date, time, tz } = await req.json();
+  const chart = getPillars(new Date(date + 'T' + time + tz));
+  return Response.json(chart);
+};
+Calculations stay inside your infra; only the ready JSON is ever shared with GPT-4o.
+
+3.3 GPT-interpret service
+ts
+Copy
+Edit
+const sys = `You are a senior BaZi consultant...`
+const user = JSON.stringify({ chart, extras })
+openai.chat.completions.create({
+  model: "gpt-4o",
+  stream: true,
+  messages: [{role:"system",content:sys},{role:"user",content:user}]
+})
+Streaming keeps UX snappy (<300 ms TTFB).
+
+4 Data, privacy & compliance
+PII minimisation: Only e-mail is required; birth data are encrypted at-rest.
+
+OpenAI data usage: Set headers: {"OpenAI-Data-Usage-Policy": "no-training"}; document retention ≤30 days 
+OpenAI Platform
+.
+
+GDPR/PDPA ready: PlanetScale + Vercel offer regional data residency; honour Indonesian PDP Law for local users.
+
+5 Development roadmap
+Sprint	Milestones
+0 (week-end)	Repo scaffold → Next.js app dir, CI, Prettier ESLint.
+1	BaZiSvc PoC with bazi-calculator-by-alvamind; jest tests on 20 sample charts.
+2	Wizard UI + TanStack forms; edge deployment.
+3	GPT-integration (streaming); basic narrative.
+4	Visualization suite (Recharts radar & timeline); PDF export (React-PDF).
+5	Stripe metered billing; tier limits on GPT tokens.
+6	Polish: i18n, PWA, Lighthouse ≥ 95, production launch.
+
+6 Optional premium add-ons
+Feng-Shui overlay: ask for current home’s compass bearing → show flying-star heatmap that matches user’s Day-Master.
+
+Relationship mode: second person’s DOB → composite clash chart.
+
+Webhook API: allow partners (wedding planners, HR apps) to POST birth data and receive JSON insights.
+
+7 Why this stack scales
+Edge functions keep latency <100 ms across SEA.
+
+Stateless GPT prompts mean horizontal scale equals Vercel region count; BaZi math stays deterministic and cheap.
+
+PlanetScale branching lets you test new scoring algorithms without downtime.
+
+Typed schema (Prisma) guards against weird optional-field combos (blood type etc.).
+
