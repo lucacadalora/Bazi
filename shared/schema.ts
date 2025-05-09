@@ -33,6 +33,7 @@ export const baziReadings = pgTable("bazi_readings", {
   id: serial("id").primaryKey(),
   userId: varchar("user_id").references(() => users.id),
   fullName: text("full_name").notNull(),
+  email: text("email"),
   birthDate: text("birth_date").notNull(),
   birthTime: text("birth_time").notNull(),
   isExactTime: boolean("is_exact_time").notNull(),
