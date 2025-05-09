@@ -8,6 +8,11 @@ import { useToast } from "@/hooks/use-toast";
 import { submitBaziReading } from "@/lib/openai";
 import { useMutation } from "@tanstack/react-query";
 
+// Helper function to handle null or undefined values in inputs
+const getStringValue = (value: string | null | undefined): string => {
+  return value === null || value === undefined ? "" : value;
+};
+
 import {
   Form,
   FormControl,
@@ -56,9 +61,9 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
       birthTime: "",
       isExactTime: true,
       birthCity: "",
-      bloodType: "",
+      bloodType: "none",
       religion: "",
-      maritalStatus: "",
+      maritalStatus: "none",
       currentCity: "",
       interests: [],
       privacy: false,
@@ -267,14 +272,14 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                 render={({ field }) => (
                   <FormItem className="mb-5">
                     <FormLabel>Blood Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={getStringValue(field.value)}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select blood type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">Select blood type</SelectItem>
+                        <SelectItem value="none">Select blood type</SelectItem>
                         <SelectItem value="A">A</SelectItem>
                         <SelectItem value="B">B</SelectItem>
                         <SelectItem value="AB">AB</SelectItem>
@@ -297,6 +302,7 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                       <Input
                         placeholder="Your spiritual or religious practice"
                         {...field}
+                        value={getStringValue(field.value)}
                       />
                     </FormControl>
                     <FormMessage />
@@ -310,14 +316,14 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                 render={({ field }) => (
                   <FormItem className="mb-5">
                     <FormLabel>Marital Status</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                    <Select onValueChange={field.onChange} defaultValue={getStringValue(field.value)}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">Select status</SelectItem>
+                        <SelectItem value="none">Select status</SelectItem>
                         <SelectItem value="single">Single</SelectItem>
                         <SelectItem value="married">Married</SelectItem>
                         <SelectItem value="divorced">Divorced</SelectItem>
@@ -340,6 +346,7 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
                       <Input
                         placeholder="Where you currently live"
                         {...field}
+                        value={getStringValue(field.value)}
                       />
                     </FormControl>
                     <FormMessage />
