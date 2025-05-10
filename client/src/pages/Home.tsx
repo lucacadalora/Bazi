@@ -5,7 +5,7 @@ import Hero from "@/components/layout/Hero";
 import Footer from "@/components/layout/Footer";
 import Testimonials from "@/components/layout/Testimonials";
 import Cta from "@/components/layout/Cta";
-import BaziForm from "@/components/BaziForm";
+import SimpleBaziForm from "@/components/SimpleBaziForm";
 import AnalysisResults from "@/components/AnalysisResults";
 import ElementsBreakdown from "@/components/ElementsBreakdown";
 import Recommendations from "@/components/Recommendations";
@@ -82,7 +82,7 @@ export default function Home() {
           <div id="tabContent">
             {/* Information Form Tab */}
             <div className={activeTab === "information" ? "block" : "hidden"} id="information" role="tabpanel" aria-labelledby="information-tab">
-              <BaziForm 
+              <SimpleBaziForm 
                 onAnalysisComplete={handleAnalysisComplete} 
                 setActiveTab={setActiveTab} 
               />
