@@ -55,7 +55,8 @@ export default function AnalysisResults({ analysis, isLoading }: AnalysisResults
     }
   };
 
-  if (isLoading || !showResults) {
+  // Only show loading animation if actively loading a new analysis
+  if (isLoading) {
     return (
       <div className="text-center py-12">
         <div className="inline-block relative w-40 h-40 mb-6">
@@ -91,8 +92,31 @@ export default function AnalysisResults({ analysis, isLoading }: AnalysisResults
   if (!analysis) {
     return (
       <div className="text-center py-12">
-        <h2 className="font-display text-2xl font-semibold mb-3">No Analysis Available</h2>
-        <p className="text-gray-600">Please complete the form to generate your BaZi analysis.</p>
+        <div className="bg-paper/30 rounded-xl p-8 max-w-xl mx-auto">
+          <div className="mb-6 text-primary opacity-60">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+            </svg>
+          </div>
+          <h2 className="font-display text-2xl font-semibold mb-3 text-ink">No Analysis Available Yet</h2>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            Please go to the "Your Information" tab and complete the form to generate your personalized BaZi analysis.
+          </p>
+          <button 
+            className="inline-flex items-center text-primary hover:text-primary-dark font-medium"
+            onClick={() => {
+              const informationTab = document.getElementById("information-tab");
+              if (informationTab) {
+                informationTab.click();
+              }
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Go to Form
+          </button>
+        </div>
       </div>
     );
   }
