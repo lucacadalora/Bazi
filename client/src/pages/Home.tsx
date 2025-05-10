@@ -22,9 +22,10 @@ export default function Home() {
     setIsLoading(false);
   };
 
-  // Handle form submission
+  // Handle form submission - will be triggered before API call
   const handleFormSubmit = () => {
     setIsLoading(true);
+    setActiveTab("analysis"); // Automatically switch to analysis tab on form submission
   };
 
   // Define tab configuration
@@ -83,7 +84,8 @@ export default function Home() {
             {/* Information Form Tab */}
             <div className={activeTab === "information" ? "block" : "hidden"} id="information" role="tabpanel" aria-labelledby="information-tab">
               <SimpleBaziForm 
-                onAnalysisComplete={handleAnalysisComplete} 
+                onAnalysisComplete={handleAnalysisComplete}
+                onFormSubmit={handleFormSubmit}
                 setActiveTab={setActiveTab} 
               />
             </div>

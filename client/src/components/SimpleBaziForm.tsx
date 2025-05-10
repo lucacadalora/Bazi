@@ -33,10 +33,11 @@ type BaziFormValues = z.infer<typeof formSchema>;
 
 interface BaziFormProps {
   onAnalysisComplete: (data: any) => void;
+  onFormSubmit?: () => void;
   setActiveTab: (tab: string) => void;
 }
 
-export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: BaziFormProps) {
+export default function SimpleBaziForm({ onAnalysisComplete, onFormSubmit, setActiveTab }: BaziFormProps) {
   const { toast } = useToast();
   
   // Initialize form with default values
@@ -63,7 +64,6 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
     mutationFn: submitBaziReading,
     onSuccess: (data) => {
       onAnalysisComplete(data);
-      setActiveTab("analysis");
       toast({
         title: "BaZi Analysis Complete",
         description: "Your personalized reading is ready to view.",
@@ -82,6 +82,10 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
   // Form submission handler
   function onSubmit(values: BaziFormValues) {
     console.log("Submitting form with values:", values);
+    // Call onFormSubmit to trigger loading state and tab switch before API call
+    if (onFormSubmit) {
+      onFormSubmit();
+    }
     mutation.mutate(values);
   }
 
