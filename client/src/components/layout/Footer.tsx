@@ -2,21 +2,22 @@ import { Link } from "wouter";
 
 export default function Footer() {
   return (
-    <footer className="bg-ink text-white pt-12 pb-6">
+    <footer className="bg-ink text-white pt-10 pb-6">
       <div className="container mx-auto px-4">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-          <div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+          {/* Company Info - Always full width on mobile */}
+          <div className="col-span-1 sm:col-span-2 md:col-span-1">
             <div className="flex items-center space-x-2 mb-4">
-              <div className="text-accent text-3xl">☯</div>
+              <div className="text-accent text-2xl sm:text-3xl">☯</div>
               <div>
-                <h3 className="font-display text-xl font-bold">BaZi Insight</h3>
+                <h3 className="font-display text-lg sm:text-xl font-bold">BaZi Insight</h3>
                 <p className="text-xs text-gray-400">Professional Chinese Astrology</p>
               </div>
             </div>
-            <p className="text-gray-400 text-sm mb-4">
+            <p className="text-gray-400 text-sm mb-4 max-w-xs">
               Explore the ancient wisdom of Chinese BaZi astrology for modern insights into your life path and destiny.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-5">
               <a href="#" className="text-gray-400 hover:text-white transition duration-300">
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
                   <path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z" />
@@ -40,44 +41,47 @@ export default function Footer() {
             </div>
           </div>
           
-          <div>
-            <h4 className="font-medium text-white mb-4">Quick Links</h4>
+          {/* Quick Links */}
+          <div className="col-span-1">
+            <h4 className="font-medium text-white mb-3 text-lg">Quick Links</h4>
             <ul className="text-gray-400 space-y-2">
-              <li><Link href="/" className="hover:text-white transition duration-300">Home</Link></li>
-              <li><Link href="/about" className="hover:text-white transition duration-300">About BaZi</Link></li>
-              <li><Link href="/services" className="hover:text-white transition duration-300">Services</Link></li>
-              <li><Link href="/testimonials" className="hover:text-white transition duration-300">Testimonials</Link></li>
-              <li><Link href="/contact" className="hover:text-white transition duration-300">Contact Us</Link></li>
+              <li><Link href="/" className="hover:text-white transition duration-300 text-sm sm:text-base">Home</Link></li>
+              <li><Link href="/about" className="hover:text-white transition duration-300 text-sm sm:text-base">About BaZi</Link></li>
+              <li><Link href="/services" className="hover:text-white transition duration-300 text-sm sm:text-base">Services</Link></li>
+              <li><Link href="/testimonials" className="hover:text-white transition duration-300 text-sm sm:text-base">Testimonials</Link></li>
+              <li><Link href="/contact" className="hover:text-white transition duration-300 text-sm sm:text-base">Contact Us</Link></li>
             </ul>
           </div>
           
-          <div>
-            <h4 className="font-medium text-white mb-4">Resources</h4>
+          {/* Resources */}
+          <div className="col-span-1">
+            <h4 className="font-medium text-white mb-3 text-lg">Resources</h4>
             <ul className="text-gray-400 space-y-2">
-              <li><Link href="/basics" className="hover:text-white transition duration-300">BaZi Basics</Link></li>
-              <li><Link href="/elements" className="hover:text-white transition duration-300">Five Elements Guide</Link></li>
-              <li><Link href="/feng-shui" className="hover:text-white transition duration-300">Feng Shui Tips</Link></li>
-              <li><Link href="/compatibility" className="hover:text-white transition duration-300">Zodiac Compatibility</Link></li>
-              <li><Link href="/blog" className="hover:text-white transition duration-300">BaZi Blog</Link></li>
+              <li><Link href="/basics" className="hover:text-white transition duration-300 text-sm sm:text-base">BaZi Basics</Link></li>
+              <li><Link href="/elements" className="hover:text-white transition duration-300 text-sm sm:text-base">Five Elements</Link></li>
+              <li><Link href="/feng-shui" className="hover:text-white transition duration-300 text-sm sm:text-base">Feng Shui Tips</Link></li>
+              <li><Link href="/compatibility" className="hover:text-white transition duration-300 text-sm sm:text-base">Compatibility</Link></li>
+              <li><Link href="/blog" className="hover:text-white transition duration-300 text-sm sm:text-base">BaZi Blog</Link></li>
             </ul>
           </div>
           
-          <div>
-            <h4 className="font-medium text-white mb-4">Subscribe</h4>
-            <p className="text-gray-400 text-sm mb-4">
-              Get insights and special offers directly to your inbox.
+          {/* Subscribe */}
+          <div className="col-span-1 sm:col-span-2 md:col-span-1 mt-4 sm:mt-0">
+            <h4 className="font-medium text-white mb-3 text-lg">Subscribe</h4>
+            <p className="text-gray-400 text-sm mb-3">
+              Get insights and special offers in your inbox.
             </p>
-            <form className="mb-4">
+            <form className="mb-3">
               <div className="flex">
                 <input 
                   type="email" 
                   placeholder="Your email address" 
-                  className="px-4 py-2 rounded-l-lg w-full focus:outline-none text-gray-800"
+                  className="px-3 py-2 rounded-l-lg w-full focus:outline-none text-gray-800 text-sm"
                   aria-label="Email address"
                 />
                 <button 
                   type="submit" 
-                  className="bg-primary hover:bg-primary-dark px-4 py-2 rounded-r-lg transition duration-300"
+                  className="bg-primary hover:bg-primary-dark px-3 py-2 rounded-r-lg transition duration-300"
                   aria-label="Subscribe"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -92,12 +96,13 @@ export default function Footer() {
           </div>
         </div>
         
-        <div className="border-t border-gray-800 pt-6 mt-6">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-gray-500 mb-4 md:mb-0">
+        {/* Footer Bottom */}
+        <div className="border-t border-gray-800 pt-5 mt-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center">
+            <p className="text-xs sm:text-sm text-gray-500 mb-4 sm:mb-0 text-center sm:text-left">
               &copy; {new Date().getFullYear()} BaZi Insight. All rights reserved.
             </p>
-            <div className="flex space-x-4 text-sm text-gray-500">
+            <div className="flex flex-wrap justify-center sm:justify-end gap-x-4 gap-y-2 text-xs sm:text-sm text-gray-500">
               <a href="#" className="hover:text-gray-400 transition duration-300">Privacy Policy</a>
               <a href="#" className="hover:text-gray-400 transition duration-300">Terms of Service</a>
               <a href="#" className="hover:text-gray-400 transition duration-300">Cookie Policy</a>
