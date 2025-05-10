@@ -74,12 +74,12 @@ export default function Home() {
       <Hero />
       
       {/* Main Content Area with Tabs */}
-      <main className="container mx-auto px-4 py-12 -mt-16 relative z-20 flex-grow">
-        <div className="bg-white rounded-xl shadow-xl p-6 md:p-8">
+      <main className="container mx-auto px-3 sm:px-4 py-8 sm:py-12 -mt-12 sm:-mt-16 relative z-20 flex-grow">
+        <div className="bg-white rounded-lg sm:rounded-xl shadow-md sm:shadow-xl p-4 sm:p-6 md:p-8">
           <TabNavigation activeTab={activeTab} setActiveTab={setActiveTab} tabs={tabs} />
           
           {/* Tab Content */}
-          <div id="tabContent">
+          <div id="tabContent" className="mt-4 sm:mt-6">
             {/* Information Form Tab */}
             <div className={activeTab === "information" ? "block" : "hidden"} id="information" role="tabpanel" aria-labelledby="information-tab">
               <SimpleBaziForm 

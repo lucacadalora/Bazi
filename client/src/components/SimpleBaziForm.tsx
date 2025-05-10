@@ -89,67 +89,88 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <Card>
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Personal Information</h3>
               
-              <FormField
-                control={form.control}
-                name="fullName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Full Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter your full name" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="fullName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Full Name</FormLabel>
+                      <FormControl>
+                        <Input 
+                          placeholder="Enter your full name" 
+                          className="h-11 text-base"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email (optional)</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="email" 
+                          placeholder="Enter your email" 
+                          className="h-11 text-base"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email (optional)</FormLabel>
-                    <FormControl>
-                      <Input type="email" placeholder="Enter your email" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <h3 className="text-lg font-medium mt-6 pt-2">Birth Information</h3>
               
-              <h3 className="text-lg font-medium mt-6">Birth Information</h3>
-              
-              <FormField
-                control={form.control}
-                name="birthDate"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Birth Date</FormLabel>
-                    <FormControl>
-                      <Input type="date" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="birthTime"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Birth Time</FormLabel>
-                    <FormControl>
-                      <Input type="time" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="birthDate"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Birth Date</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="date" 
+                          className="h-11 text-base"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="birthTime"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Birth Time</FormLabel>
+                      <FormControl>
+                        <Input 
+                          type="time" 
+                          className="h-11 text-base"
+                          {...field} 
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
               
               <FormField
                 control={form.control}
@@ -158,14 +179,18 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
                   <FormItem>
                     <FormLabel>Birth City</FormLabel>
                     <FormControl>
-                      <Input placeholder="City where you were born" {...field} />
+                      <Input 
+                        placeholder="City where you were born" 
+                        className="h-11 text-base"
+                        {...field} 
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               
-              <h3 className="text-lg font-medium mt-6">Additional Information</h3>
+              <h3 className="text-lg font-medium mt-6 pt-2">Additional Information</h3>
               
               <FormField
                 control={form.control}
@@ -176,6 +201,7 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
                     <FormControl>
                       <Input 
                         placeholder="City where you currently live" 
+                        className="h-11 text-base"
                         value={field.value || ""}
                         onChange={field.onChange}
                         onBlur={field.onBlur}
@@ -193,12 +219,13 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
                 name="privacy"
                 render={({ field }) => (
                   <FormItem className="mt-6">
-                    <div className="flex items-center">
+                    <div className="flex items-start">
                       <FormControl>
                         <Checkbox
                           checked={field.value}
                           onCheckedChange={field.onChange}
                           id="privacy"
+                          className="mt-1"
                         />
                       </FormControl>
                       <FormLabel htmlFor="privacy" className="ml-2 text-sm text-gray-700">
@@ -215,7 +242,7 @@ export default function SimpleBaziForm({ onAnalysisComplete, setActiveTab }: Baz
               <Button
                 type="submit"
                 disabled={mutation.isPending}
-                className="w-full bg-primary hover:bg-primary-dark transition-colors"
+                className="w-full py-6 text-base bg-primary hover:bg-primary-dark transition-colors"
               >
                 {mutation.isPending ? "Processing..." : "Generate BaZi Analysis"}
               </Button>
