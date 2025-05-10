@@ -1,9 +1,10 @@
+import React from "react";
 import { useStepperContext } from "./StepperContext";
 import { Button } from "@/components/ui/button";
 
 interface StepperButtonsProps {
   onComplete?: () => void;
-  completeText?: string;
+  completeText?: string | React.ReactNode;
   nextDisabled?: boolean;
   backDisabled?: boolean;
 }
@@ -39,8 +40,8 @@ export function StepperButtons({
       
       {isLastStep ? (
         <Button
-          type="button"
-          onClick={handleComplete}
+          type={onComplete ? "button" : "submit"}
+          onClick={onComplete ? handleComplete : undefined}
           disabled={nextDisabled}
           className="px-6 bg-primary hover:bg-primary-dark transition-colors"
         >
