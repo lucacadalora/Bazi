@@ -15,10 +15,11 @@ interface RecommendationsProps {
 }
 
 export default function Recommendations({ analysis }: RecommendationsProps) {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     if (analysis) {
+      setIsLoading(true);
       const timer = setTimeout(() => {
         setIsLoading(false);
       }, 500);
@@ -26,10 +27,42 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
     }
   }, [analysis]);
 
-  if (isLoading || !analysis) {
+  if (isLoading) {
     return (
       <div className="flex justify-center items-center py-16">
         <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+      </div>
+    );
+  }
+  
+  if (!analysis) {
+    return (
+      <div className="text-center py-12">
+        <div className="bg-paper/30 rounded-xl p-8 max-w-xl mx-auto">
+          <div className="mb-6 text-accent opacity-60">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <h2 className="font-display text-2xl font-semibold mb-3 text-ink">No Recommendations Yet</h2>
+          <p className="text-gray-600 mb-6 max-w-md mx-auto">
+            Please go to the "Your Information" tab and generate your BaZi analysis first to receive personalized recommendations.
+          </p>
+          <button 
+            className="inline-flex items-center text-accent hover:text-accent-dark font-medium"
+            onClick={() => {
+              const informationTab = document.getElementById("information-tab");
+              if (informationTab) {
+                informationTab.click();
+              }
+            }}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            Go to Form
+          </button>
+        </div>
       </div>
     );
   }
