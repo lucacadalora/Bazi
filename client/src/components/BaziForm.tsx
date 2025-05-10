@@ -3,7 +3,6 @@ import { z } from "zod";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { baziReadingSchema } from "@shared/schema";
-import { YinYangIcon } from "./icons/ElementIcons";
 import { useToast } from "@/hooks/use-toast";
 import { submitBaziReading } from "@/lib/openai";
 import { useMutation } from "@tanstack/react-query";
@@ -58,7 +57,6 @@ function StepContent({ step }: { step: number }) {
 
 export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormProps) {
   const { toast } = useToast();
-  const [interestsList, setInterestsList] = useState<string[]>([]);
   
   // Initialize form with default values
   const form = useForm<BaziFormValues>({
@@ -91,6 +89,7 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
       });
     },
     onError: (error) => {
+      console.error("Error submitting BaZi reading:", error);
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to generate BaZi analysis",
@@ -101,23 +100,17 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
 
   // Form submission handler
   function onSubmit(values: BaziFormValues) {
-    // Submit the form data
+    console.log("Submitting form with values:", values);
     mutation.mutate(values);
   }
 
   // Define steps for the stepper
   const steps = ["Personal", "Birth Details", "Additional Info"];
   
-  // Update interests array before form submission
-  const handleFormSubmit = form.handleSubmit((values) => {
-    // Make sure interests are included
-    onSubmit(values);
-  });
-
   return (
     <Form {...form}>
       <FormProvider {...form}>
-        <form onSubmit={handleFormSubmit} className="space-y-8 max-w-4xl mx-auto">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-4xl mx-auto">
           <Stepper steps={steps}>
             <div className="bg-white/80 shadow-md rounded-lg p-6">
               <StepContent step={0} />
@@ -147,15 +140,7 @@ export default function BaziForm({ onAnalysisComplete, setActiveTab }: BaziFormP
               />
               
               <StepperButtons 
-                completeText={mutation.isPending ? (
-                  <div className="flex items-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Processing...
-                  </div>
-                ) : "Generate BaZi Analysis"}
+                completeText={mutation.isPending ? "Processing..." : "Generate BaZi Analysis"}
                 nextDisabled={mutation.isPending}
               />
             </div>
