@@ -26,7 +26,6 @@ const formSchema = baziReadingSchema.extend({
   privacy: z.boolean().refine((val) => val === true, {
     message: "You must agree to the privacy policy and terms of service",
   }),
-  email: z.string().email().optional(),
 });
 
 type BaziFormValues = z.infer<typeof formSchema>;
@@ -45,7 +44,6 @@ export default function SimpleBaziForm({ onAnalysisComplete, onFormSubmit, setAc
     resolver: zodResolver(formSchema),
     defaultValues: {
       fullName: "",
-      email: "",
       birthDate: "",
       birthTime: "",
       isExactTime: true,
@@ -97,44 +95,23 @@ export default function SimpleBaziForm({ onAnalysisComplete, onFormSubmit, setAc
             <div className="space-y-4">
               <h3 className="text-lg font-medium">Personal Information</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="fullName"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Full Name</FormLabel>
-                      <FormControl>
-                        <Input 
-                          placeholder="Enter your full name" 
-                          className="h-11 text-base"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email (optional)</FormLabel>
-                      <FormControl>
-                        <Input 
-                          type="email" 
-                          placeholder="Enter your email" 
-                          className="h-11 text-base"
-                          {...field} 
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
+              <FormField
+                control={form.control}
+                name="fullName"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Full Name</FormLabel>
+                    <FormControl>
+                      <Input 
+                        placeholder="Enter your full name" 
+                        className="h-11 text-base"
+                        {...field} 
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               
               <h3 className="text-lg font-medium mt-6 pt-2">Birth Information</h3>
               
