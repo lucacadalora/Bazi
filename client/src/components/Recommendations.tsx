@@ -438,7 +438,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
           </p>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-            {analysis.recommendations.talismans.map((talisman, index) => {
+            {(analysis.recommendations.talismans || []).map((talisman, index) => {
               const colors = getElementColor(talisman.element);
               return (
                 <div key={index} className={`${colors.bgLight} rounded-lg p-4 text-center`}>
