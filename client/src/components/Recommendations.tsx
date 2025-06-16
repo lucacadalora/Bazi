@@ -144,7 +144,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
           <div className="hidden md:block absolute left-1/2 h-full w-0.5 bg-gray-200 transform -translate-x-1/2"></div>
           
           <div className="space-y-6 relative">
-            {analysis.recommendations.periods.map((period, index) => (
+            {(analysis.recommendations.periods || []).map((period, index) => (
               <div key={index} className="flex flex-col md:flex-row items-center">
                 {index % 2 === 0 ? (
                   <>
@@ -219,7 +219,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
             </div>
             
             <ul className="space-y-4">
-              {analysis.recommendations.practices.map((practice, index) => {
+              {(analysis.recommendations.practices || []).map((practice, index) => {
                 const colors = getElementColor(practice.element);
                 return (
                   <li key={index} className="flex items-start">
@@ -249,7 +249,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
             </div>
             
             <ul className="space-y-4">
-              {analysis.recommendations.avoidances.map((avoidance, index) => {
+              {(analysis.recommendations.avoidances || []).map((avoidance, index) => {
                 const colors = getElementColor(avoidance.element);
                 return (
                   <li key={index} className="flex items-start">
@@ -284,7 +284,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
                 <h4 className="font-medium text-gray-800">Home Environment</h4>
               </div>
               <ul className="space-y-2 text-sm text-gray-700">
-                {analysis.recommendations.environment.home.map((item, index) => (
+                {(analysis.recommendations.environment?.home || []).map((item, index) => (
                   <li key={index} className="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-secondary mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -305,7 +305,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
                 <h4 className="font-medium text-gray-800">Dietary Balance</h4>
               </div>
               <ul className="space-y-2 text-sm text-gray-700">
-                {analysis.recommendations.environment.diet.map((item, index) => (
+                {(analysis.recommendations.environment?.diet || []).map((item, index) => (
                   <li key={index} className="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -326,7 +326,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
                 <h4 className="font-medium text-gray-800">Daily Routines</h4>
               </div>
               <ul className="space-y-2 text-sm text-gray-700">
-                {analysis.recommendations.environment.routine.map((item, index) => (
+                {(analysis.recommendations.environment?.routine || []).map((item, index) => (
                   <li key={index} className="flex items-start">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-accent mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
@@ -354,7 +354,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
               <div className="mb-4">
                 <h4 className="font-medium text-gray-800 mb-2">Home & Office Arrangement</h4>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  {analysis.recommendations.fengShui.slice(0, 3).map((item, index) => (
+                  {(analysis.recommendations.fengShui || []).slice(0, 3).map((item, index) => (
                     <li key={index} className="flex items-start">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-water mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" />
@@ -368,7 +368,7 @@ export default function Recommendations({ analysis }: RecommendationsProps) {
               <div>
                 <h4 className="font-medium text-gray-800 mb-2">Balancing Elements in Your Space</h4>
                 <ul className="space-y-2 text-sm text-gray-700">
-                  {analysis.recommendations.fengShui.slice(3).map((item, index) => (
+                  {(analysis.recommendations.fengShui || []).slice(3).map((item, index) => (
                     <li key={index} className="flex items-start">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-primary mt-0.5 mr-2 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
